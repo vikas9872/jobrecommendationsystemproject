@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-2dir7bu+st-pt=z-6#%6$a(0xinp-5)w(s2b%v*3o96i%)2poh
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'jobrecommendationsystemproject.onrender.com'
+    'jobrecommendationsystemproject.onrender.com',
+    '127.0.0.1',
+    'localhost',
 ]
 
 
