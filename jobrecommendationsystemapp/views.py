@@ -100,7 +100,7 @@ def predict_view(request):
             'predicted_role': predicted_role,
             'job_link':job_link
         })
-    return render(request, 'home/enter_details.html')
+    return render(request, 'home/enterdetailspage.html')
 
 def upload_resume(request):
     error_message = ""
