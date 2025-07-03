@@ -26,7 +26,7 @@ Built with Django and integrated with a machine learning model (Random Forest), 
 ![Home Page](screenshots/homepage.jpg)
 
 ### 🔐 Register Page  
-![Register](screenshots/registerpage.jpg)
+![Register](screenshots/registrationpage.jpg)
 
 ### 🔓 Login Page  
 ![Login](screenshots/loginpage.jpg)
