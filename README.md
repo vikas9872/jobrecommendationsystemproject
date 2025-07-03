@@ -85,16 +85,13 @@ http://127.0.0.1:8000/
 
 ---
 ## ⚙️ Deployment on Render
+-🛰️ The project is deployed using [Render](https://render.com). 
 
-🛰️ The project is deployed using [Render](https://render.com).  
-🌐 Live App: [https://jobrecommendationsystemproject.onrender.com](https://jobrecommendationsystemproject.onrender.com)
 ---
 
 ## 📩 Contact
-
 For questions, feedback, or collaboration:
-
-- 📧 vikas.your.email@example.com  
+- 📧 vikas.v.shanabhog@gmail.com  
 - 🌐 [LinkedIn](https://www.linkedin.com/in/shanabhogvikas/) 
 
 ---
