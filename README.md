@@ -23,13 +23,13 @@ Built with Django and integrated with a machine learning model (Random Forest), 
 ## 🖼️ Screenshots
 
 ### 🔷 Home Page  
-![Home Page](screenshots/home.jpg)
+![Home Page](screenshots/homepage.jpg)
 
 ### 🔶 Input Form  
-![Form](screenshots/form.jpg)
+![Input Form](screenshots/formpage.jpg)
 
 ### ✅ Prediction Result  
-![Prediction Result](screenshots/result.jpg)
+![Prediction Result](screenshots/resultpage.jpg)
 
 ---
 
