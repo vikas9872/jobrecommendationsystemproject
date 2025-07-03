@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Choose an Option | AI Job Recommendation{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto mt-16 px-4">
+  <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">What would you like to do?</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+    
+    <!-- Option 1: Enter Details -->
+    <a href="{% url 'enter_details' %}" class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border hover:border-blue-600">
+      <div class="text-4xl mb-2">🧾</div>
+      <h3 class="text-xl font-semibold mb-1 text-gray-800">Enter Details</h3>
+      <p class="text-sm text-gray-600">Manually fill in your information to get personalized job recommendations.</p>
+    </a>
+
+    <!-- Option 2: Create Resume -->
+    <a href="https://resumesgenerator.vercel.app/" target="_blank" class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border hover:border-blue-600">
+      <div class="text-4xl mb-2">📝</div>
+      <h3 class="text-xl font-semibold mb-1 text-gray-800">Create Resume</h3>
+      <p class="text-sm text-gray-600">Use our resume builder tool to quickly create a professional resume.</p>
+    </a>
+
+    <!-- Option 3: Upload Resume -->
+    <a href="{% url 'upload_resume' %}" class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border hover:border-blue-600">
+      <div class="text-4xl mb-2">📤</div>
+      <h3 class="text-xl font-semibold mb-1 text-gray-800">Upload Resume</h3>
+      <p class="text-sm text-gray-600">Upload your existing resume (PDF or DOC) and let us parse it automatically.</p>
+    </a>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Upload Resume | AI Job Recommendation{% endblock %}
+
+{% block content %}
+<section class="max-w-3xl mx-auto mt-12 px-6 py-10 bg-white bg-opacity-95 rounded-2xl shadow-lg">
+  <h2 class="text-3xl font-bold text-indigo-700 mb-4 text-center">📤 Upload Your Resume</h2>
+  <p class="text-center text-gray-600 mb-8">
+    Let our AI analyze your resume and recommend jobs tailored to your skills and experience.
+  </p>
+
+  <form action="{% url 'upload_resume' %}" method="POST" enctype="multipart/form-data"
+        class="flex flex-col items-center gap-6">
+    {% csrf_token %}
+    
+    <!-- File Input -->
+    <label class="w-full text-center">
+      <span class="block mb-2 text-sm font-medium text-gray-700">Select your resume (PDF or DOC)</span>
+      <input type="file" name="resume" accept=".pdf,.doc,.docx"
+             class="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
+                    file:rounded-lg file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-indigo-50 file:text-indigo-700
+                    hover:file:bg-indigo-100
+                    border border-gray-300 rounded-lg shadow-sm p-2"
+             required>
+    </label>
+
+    <!-- Submit Button -->
+    <button type="submit"
+            class="mt-2 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition text-sm shadow focus:ring-2 focus:ring-indigo-500">
+      🚀 Analyze
+    </button>
+    
+    <!-- Optional Note -->
+    <p class="text-xs text-gray-500 text-center">
+      Supported formats: .pdf | Max size: 2MB
+    </p>
+  </form>
+  <!-- {% if extracted_skills %}
+    <div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800 shadow">
+      <strong>Extracted Skills:</strong>
+      <div class="mt-2">
+        {{ extracted_skills }}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if error_message %}
+    <div class="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 shadow">
+      <strong>Error:</strong>
+      <div class="mt-2">
+        {{ error_message }}
+      </div>
+    </div>
+  {% endif %} -->
+
+</section>
+{% endblock %}

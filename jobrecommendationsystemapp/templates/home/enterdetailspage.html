@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Enter Details | AI Job Recommendation{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto mt-12 px-6 py-10 bg-white bg-opacity-95 rounded-2xl shadow-lg">
+  <h2 class="text-3xl font-bold text-indigo-700 mb-6 text-center">🔍 Job Role Predictor</h2>
+  <p class="text-center text-gray-600 mb-8">Fill in your details and let our AI suggest the most suitable job role for you.</p>
+
+  <form action="{% url 'predict_view' %}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% csrf_token %}
+
+    <!-- Skills -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">💼 Skills</label>
+      <input type="text" name="skills" placeholder="e.g. Python, SQL, Django"
+        class="w-full border px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 text-sm" required>
+    </div>
+
+    <!-- Experience -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">📊 Experience (Years)</label>
+      <input type="number" name="experience" placeholder="e.g. 2" step="0.1" min="0"
+        class="w-full border px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 text-sm" required>
+    </div>
+
+    <!-- Area of Interest -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">🎯 Area of Interest</label>
+      <input type="text" name="interest" placeholder="e.g. AI, UI/UX, Backend"
+        class="w-full border px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 text-sm" required>
+    </div>
+
+    <!-- Education Level -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">🎓 Education Level</label>
+      <select name="education"
+        class="w-full border px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 text-sm" required>
+        <option value="">-- Select --</option>
+        <option value="Graduate">Graduate</option>
+        <option value="Post Graduate">Post Graduate</option>
+        <option value="Diploma">Diploma</option>
+      </select>
+    </div>
+
+    <!-- Work Preference -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">🏢 Work Preference</label>
+      <select name="work_type"
+        class="w-full border px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 text-sm" required>
+        <option value="">-- Select --</option>
+        <option value="Remote">Remote</option>
+        <option value="Onsite">Onsite</option>
+        <option value="Hybrid">Hybrid</option>
+      </select>
+    </div>
+
+    <!-- Communication Skills -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">🗣️ Communication Skills (1–10)</label>
+      <input type="number" name="communication" placeholder="Rate from 1 to 10" min="1" max="10"
+        class="w-full border px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 text-sm" required>
+    </div>
+
+    <!-- Submit -->
+    <div class="md:col-span-2 flex justify-between items-center mt-6">
+      <a href="{% url 'options_page' %}" 
+         class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-sm text-sm transition">
+        ⬅️ Back to Options
+      </a>
+
+      <button type="submit"
+        class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition text-sm shadow focus:ring-2 focus:ring-indigo-500">
+        🚀 Recommend role
+      </button>
+    </div>
+  </form>
+</section>
+{% endblock %}

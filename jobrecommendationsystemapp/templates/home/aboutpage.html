@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}About Us | AI Job Recommendation{% endblock %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-6 py-16 mt-6">
+  <h1 class="text-4xl font-bold text-center text-gray-800 mb-12">About Us</h1>
+
+  <!-- Grid Section for Mission and Vision -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+    <!-- Mission Section -->
+    <div class="bg-gradient-to-br from-white to-gray-100 p-10 rounded-2xl shadow-lg text-center">
+      <div class="text-5xl mb-4">🎯</div>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-4">Our Mission</h2>
+      <p class="text-gray-700 text-base leading-relaxed">
+        We strive to bridge the gap between talented individuals and the right opportunities by leveraging artificial intelligence. Our platform simplifies job searches, improves resume quality, and increases hiring success — empowering job seekers with data-driven insights.
+      </p>
+    </div>
+
+    <!-- Vision Section -->
+    <div class="bg-gradient-to-br from-white to-gray-100 p-10 rounded-2xl shadow-lg text-center">
+      <div class="text-5xl mb-4">💡</div>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-4">Why We Built This</h2>
+      <p class="text-gray-700 text-base leading-relaxed">
+        The job market is overwhelming, not due to lack of roles — but because standing out is tough. We created this system to empower users with personalized job recommendations and effortless resume creation, making career advancement more accessible and impactful.
+      </p>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

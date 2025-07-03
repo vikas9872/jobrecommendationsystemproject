@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Register | AI Job Recommendation{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto mt-12 bg-white bg-opacity-90 p-8 rounded-xl shadow-md">
+  <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Create an Account</h2>
+
+  <form method="POST" class="space-y-4">
+    {% csrf_token %}
+
+    <!-- Username -->
+    <div>
+      <label for="id_username" class="block text-gray-700 font-medium mb-1">Username</label>
+      <input type="text" name="username" id="id_username" required
+             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      {% if form.username.errors %}
+        <p class="text-red-500 text-sm">{{ form.username.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="id_email" class="block text-gray-700 font-medium mb-1">Email</label>
+      <input type="email" name="email" id="id_email" required
+             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      {% if form.email.errors %}
+        <p class="text-red-500 text-sm">{{ form.email.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Password -->
+    <div>
+      <label for="id_password1" class="block text-gray-700 font-medium mb-1">Password</label>
+      <input type="password" name="password1" id="id_password1" required
+             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      {% if form.password1.errors %}
+        <p class="text-red-500 text-sm">{{ form.password1.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Confirm Password -->
+    <div>
+      <label for="id_password2" class="block text-gray-700 font-medium mb-1">Confirm Password</label>
+      <input type="password" name="password2" id="id_password2" required
+             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      {% if form.password2.errors %}
+        <p class="text-red-500 text-sm">{{ form.password2.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Submit -->
+    <button type="submit"
+            class="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition">
+      Register
+    </button>
+  </form>
+
+  <p class="text-sm text-center text-gray-600 mt-4">
+    Already have an account?
+    <a href="/login/" class="text-blue-600 hover:underline">Log in here</a>.
+  </p>
+</section>
+{% endblock %}
