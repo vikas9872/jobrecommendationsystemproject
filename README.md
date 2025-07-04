@@ -26,7 +26,7 @@ Built with Django and integrated with a machine learning model (Random Forest), 
 ![Home Page](screenshots/homepage.jpg)
 
 ### 🔐 Register Page  
-![Register](screenshots/registerpage.jpg)
+![Register](screenshots/registrationpage.jpg)
 
 ### 🔓 Login Page  
 ![Login](screenshots/loginpage.jpg)
@@ -80,3 +80,24 @@ python manage.py runserver
 
 # 5. Open your browser and visit:
 http://127.0.0.1:8000/
+
+```
+
+---
+## ⚙️ Deployment on Render
+-🛰️ The project is deployed using [Render](https://render.com). 
+
+---
+
+## 📩 Contact
+For questions, feedback, or collaboration:
+- 📧 vikas.v.shanabhog@gmail.com  
+- 🌐 [LinkedIn](https://www.linkedin.com/in/shanabhogvikas/) 
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
