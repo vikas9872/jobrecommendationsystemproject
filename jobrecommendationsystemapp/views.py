@@ -65,14 +65,18 @@ def predict_view(request):
         interest = request.POST.get('interest', '')
         education = request.POST.get('education', '')
         work_type = request.POST.get('work_type', '')
+
+        # Load model components
         app_config = apps.get_app_config('jobrecommendationsystemapp')
         tfidf_vectorizer = getattr(app_config, 'tfidf_vectorizer', None)
         scaler = getattr(app_config, 'scaler', None)
         onehot_encoder = getattr(app_config, 'onehot_encoder', None)
         classifier = getattr(app_config, 'rf_classifier', None)
+
         predicted_role = None
         job_link = None
         remotive_jobs = []
+
         try:
             if all([tfidf_vectorizer, scaler, onehot_encoder, classifier]):
                 input_df = pd.DataFrame([{
@@ -83,19 +87,25 @@ def predict_view(request):
                     'education': education,
                     'work_type': work_type
                 }])
+
+                # Vectorize input
                 input_text = tfidf_vectorizer.transform(input_df['skills'])
                 input_numerical = csr_matrix(scaler.transform(input_df[['experience', 'communication']]))
                 input_categorical = onehot_encoder.transform(input_df[['interest', 'education', 'work_type']])
                 input_combined = hstack([input_text, input_numerical, input_categorical])
+
+                # Predict role
                 predicted_role = classifier.predict(input_combined)[0]
                 role_query = str(predicted_role).strip().replace(" ", "+")
-                # API CALLED
+
+                # Fetch jobs from Remotive API
                 remotive_url = f"https://remotive.com/api/remote-jobs?search={role_query}"
                 response = requests.get(remotive_url)
+
                 if response.status_code == 200:
                     jobs_data = response.json()
                     for idx, job in enumerate(jobs_data.get("jobs", [])):
-                        job_data = {
+                        job_info = {
                             "title": job.get("title"),
                             "company": job.get("company_name"),
                             "location": job.get("candidate_required_location"),
@@ -105,19 +115,23 @@ def predict_view(request):
                             "category": job.get("category"),
                             "publication_date": job.get("publication_date"),
                         }
-                        remotive_jobs.append(job_data)
+                        remotive_jobs.append(job_info)
                         if idx == 0 and not job_link:
-                            job_link = job_data["url"]
+                            job_link = job_info["url"]
                 else:
-                    print("Failed to fetch jobs from Remotive")
+                    print("Failed to fetch jobs from Remotive API.")
             else:
-                print("Model components not available.")
+                print("Model components are missing.")
         except Exception as e:
             print("Prediction error:", e)
-        return render(request, 'home/result.html', {
+
+        return render(request, 'home/results.html', {
             'predicted_role': predicted_role,
-            'job_link': job_link
+            'job_link': job_link,
+            'remotive_jobs': remotive_jobs,
+            'error_message': None if predicted_role else "Unable to predict job role."
         })
+
     return render(request, 'home/enterdetailspage.html')
 
 def upload_resume(request):
@@ -154,26 +168,27 @@ def upload_resume(request):
                             input_tfidf = tfidf_vectorizer.transform([extracted_skills])
                             prediction = rf_classifier.predict(input_tfidf)
                             predicted_role = prediction[0]
+                            # Call Remotive API using predicted role
                             role_query = str(predicted_role).strip().replace(" ", "+")
-                            #API CALLED
                             url = f"https://remotive.com/api/remote-jobs?search={role_query}"
                             response = requests.get(url)
                             if response.status_code == 200:
                                 jobs = response.json().get("jobs", [])
-                                for idx, job in enumerate(jobs):
-                                    job_info = {
-                                        "title": job.get("title"),
-                                        "company": job.get("company_name"),
-                                        "location": job.get("candidate_required_location"),
-                                        "url": job.get("url"),
-                                        "salary": job.get("salary"),
-                                        "job_type": job.get("job_type"),
-                                        "category": job.get("category"),
-                                        "publication_date": job.get("publication_date"),
-                                    }
-                                    remotive_jobs.append(job_info)
-                                    if idx == 0 and not job_link:
-                                        job_link = job_info["url"]
+                                for job in jobs:
+                                    if predicted_role.lower() in job.get("title", "").lower():
+                                        job_info = {
+                                            "title": job.get("title"),
+                                            "company": job.get("company_name"),
+                                            "location": job.get("candidate_required_location"),
+                                            "url": job.get("url"),
+                                            "salary": job.get("salary"),
+                                            "job_type": job.get("job_type"),
+                                            "category": job.get("category"),
+                                            "publication_date": job.get("publication_date"),
+                                        }
+                                        remotive_jobs.append(job_info)
+                                if remotive_jobs:
+                                    job_link = remotive_jobs[0]["url"]  # optional featured link
                             else:
                                 error_message = "Could not fetch jobs from Remotive."
                         except Exception as e:
@@ -189,16 +204,15 @@ def upload_resume(request):
         finally:
             if os.path.exists(file_path):
                 os.remove(file_path)
-    if predicted_role or error_message:
-        return render(request, 'home/result.html', {
-            'predicted_role': predicted_role,
-            'job_link': job_link,
-            'remotive_jobs': remotive_jobs,
-            'error_message': error_message
-        })
-    return render(request, 'home/uploadresumepage.html', {
+    return render(request, 'home/results.html', {
+        'predicted_role': predicted_role,
+        'job_link': job_link,
+        'remotive_jobs': remotive_jobs,
+        'error_message': error_message
+    }) if predicted_role or error_message else render(request, 'home/uploadresumepage.html', {
         'error_message': error_message
     })
+
 
 def result_view(request):
     return render(request,'home/result.html')
