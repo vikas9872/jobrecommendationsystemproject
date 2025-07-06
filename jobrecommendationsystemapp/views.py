@@ -110,13 +110,10 @@ def predict_view(request):
                             job_link = job_data["url"]
                 else:
                     print("Failed to fetch jobs from Remotive")
-
             else:
                 print("Model components not available.")
-
         except Exception as e:
             print("Prediction error:", e)
-
         return render(request, 'home/result.html', {
             'predicted_role': predicted_role,
             'job_link': job_link
@@ -152,7 +149,6 @@ def upload_resume(request):
                     app_config = apps.get_app_config('jobrecommendationsystemapp')
                     tfidf_vectorizer = getattr(app_config, 'tfidf_vectorizer_resume', None)
                     rf_classifier = getattr(app_config, 'rf_classifier_resume', None)
-
                     if tfidf_vectorizer and rf_classifier:
                         try:
                             input_tfidf = tfidf_vectorizer.transform([extracted_skills])
