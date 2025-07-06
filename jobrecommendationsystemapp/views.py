@@ -65,20 +65,16 @@ def predict_view(request):
         interest = request.POST.get('interest', '')
         education = request.POST.get('education', '')
         work_type = request.POST.get('work_type', '')
-
         app_config = apps.get_app_config('jobrecommendationsystemapp')
         tfidf_vectorizer = getattr(app_config, 'tfidf_vectorizer', None)
         scaler = getattr(app_config, 'scaler', None)
         onehot_encoder = getattr(app_config, 'onehot_encoder', None)
         classifier = getattr(app_config, 'rf_classifier', None)
-
         predicted_role = None
         job_link = None
         remotive_jobs = []
-
         try:
             if all([tfidf_vectorizer, scaler, onehot_encoder, classifier]):
-                # Prepare input
                 input_df = pd.DataFrame([{
                     'skills': skills,
                     'experience': experience,
@@ -91,15 +87,11 @@ def predict_view(request):
                 input_numerical = csr_matrix(scaler.transform(input_df[['experience', 'communication']]))
                 input_categorical = onehot_encoder.transform(input_df[['interest', 'education', 'work_type']])
                 input_combined = hstack([input_text, input_numerical, input_categorical])
-
-                # Predict role
                 predicted_role = classifier.predict(input_combined)[0]
                 role_query = str(predicted_role).strip().replace(" ", "+")
-
-                # 🔍 Remotive API call
+                # API CALLED
                 remotive_url = f"https://remotive.com/api/remote-jobs?search={role_query}"
                 response = requests.get(remotive_url)
-
                 if response.status_code == 200:
                     jobs_data = response.json()
                     for idx, job in enumerate(jobs_data.get("jobs", [])):
@@ -136,16 +128,13 @@ def upload_resume(request):
     predicted_role = None
     job_link = None
     remotive_jobs = []
-
     if request.method == 'POST' and request.FILES.get('resume'):
         resume_file = request.FILES['resume']
         fs = FileSystemStorage()
         filename = fs.save(resume_file.name, resume_file)
         file_path = fs.path(filename)
         resume_text = ""
-
         try:
-            # ✅ Extract resume text
             if filename.lower().endswith('.pdf'):
                 with pdfplumber.open(file_path) as pdf:
                     for page in pdf.pages:
@@ -156,12 +145,9 @@ def upload_resume(request):
                     resume_text += para.text + "\n"
             else:
                 error_message = "Unsupported file type. Please upload a PDF or DOCX file."
-
-            # ✅ Predict from resume text
             if resume_text:
                 extracted_skills = extract_skills_from_resume(resume_text)
                 print("Extracted skills:", extracted_skills)
-
                 if extracted_skills:
                     app_config = apps.get_app_config('jobrecommendationsystemapp')
                     tfidf_vectorizer = getattr(app_config, 'tfidf_vectorizer_resume', None)
@@ -173,9 +159,9 @@ def upload_resume(request):
                             prediction = rf_classifier.predict(input_tfidf)
                             predicted_role = prediction[0]
                             role_query = str(predicted_role).strip().replace(" ", "+")
+                            #API CALLED
                             url = f"https://remotive.com/api/remote-jobs?search={role_query}"
                             response = requests.get(url)
-
                             if response.status_code == 200:
                                 jobs = response.json().get("jobs", [])
                                 for idx, job in enumerate(jobs):
@@ -194,7 +180,6 @@ def upload_resume(request):
                                         job_link = job_info["url"]
                             else:
                                 error_message = "Could not fetch jobs from Remotive."
-
                         except Exception as e:
                             error_message = f"Error predicting job role: {e}"
                     else:
@@ -208,8 +193,6 @@ def upload_resume(request):
         finally:
             if os.path.exists(file_path):
                 os.remove(file_path)
-
-    # ✅ Render result
     if predicted_role or error_message:
         return render(request, 'home/result.html', {
             'predicted_role': predicted_role,
@@ -217,7 +200,6 @@ def upload_resume(request):
             'remotive_jobs': remotive_jobs,
             'error_message': error_message
         })
-
     return render(request, 'home/uploadresumepage.html', {
         'error_message': error_message
     })
