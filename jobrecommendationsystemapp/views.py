@@ -60,6 +60,7 @@ def predict_category(skills, experience, interest, education, work_type, communi
         'communication': float(communication)
     }])
 
+@login_required
 def predict_view(request):
     if request.method == 'POST':
         skills = request.POST.get('skills', '')
