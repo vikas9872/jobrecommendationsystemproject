@@ -10,6 +10,7 @@ import pdfplumber
 import docx
 from .utils import extract_skills_from_resume
 import requests
+from django.contrib.auth.decorators import login_required
 
 def home_view(request):
     return render(request, 'home/homepage.html')
@@ -41,9 +42,11 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'home/loginpage.html', {'form': form})
 
+@login_required
 def options_view(request):
     return render(request,'home/optionspage.html')
 
+@login_required
 def enter_details(request):
     return render(request, 'home/enterdetailspage.html')
 
@@ -65,18 +68,14 @@ def predict_view(request):
         interest = request.POST.get('interest', '')
         education = request.POST.get('education', '')
         work_type = request.POST.get('work_type', '')
-
-        # Load model components
         app_config = apps.get_app_config('jobrecommendationsystemapp')
         tfidf_vectorizer = getattr(app_config, 'tfidf_vectorizer', None)
         scaler = getattr(app_config, 'scaler', None)
         onehot_encoder = getattr(app_config, 'onehot_encoder', None)
         classifier = getattr(app_config, 'rf_classifier', None)
-
         predicted_role = None
         job_link = None
         remotive_jobs = []
-
         try:
             if all([tfidf_vectorizer, scaler, onehot_encoder, classifier]):
                 input_df = pd.DataFrame([{
@@ -87,21 +86,14 @@ def predict_view(request):
                     'education': education,
                     'work_type': work_type
                 }])
-
-                # Vectorize input
                 input_text = tfidf_vectorizer.transform(input_df['skills'])
                 input_numerical = csr_matrix(scaler.transform(input_df[['experience', 'communication']]))
                 input_categorical = onehot_encoder.transform(input_df[['interest', 'education', 'work_type']])
                 input_combined = hstack([input_text, input_numerical, input_categorical])
-
-                # Predict role
                 predicted_role = classifier.predict(input_combined)[0]
                 role_query = str(predicted_role).strip().replace(" ", "+")
-
-                # Fetch jobs from Remotive API
                 remotive_url = f"https://remotive.com/api/remote-jobs?search={role_query}"
                 response = requests.get(remotive_url)
-
                 if response.status_code == 200:
                     jobs_data = response.json()
                     for idx, job in enumerate(jobs_data.get("jobs", [])):
@@ -134,6 +126,7 @@ def predict_view(request):
 
     return render(request, 'home/enterdetailspage.html')
 
+@login_required
 def upload_resume(request):
     error_message = ""
     predicted_role = None
@@ -213,7 +206,7 @@ def upload_resume(request):
         'error_message': error_message
     })
 
-
+@login_required
 def result_view(request):
     return render(request,'home/result.html')
 
