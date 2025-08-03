@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.shortcuts import render, redirect
 import pandas as pd
 from scipy.sparse import hstack, csr_matrix
